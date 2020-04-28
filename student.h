@@ -1,5 +1,5 @@
-#ifndef __STUDENT_H__
-#define __STUDENT_H__
+#ifndef STUDENT_H_INCLUDED
+#define STUDENT_H_INCLUDED
 
 #define ID_LENGTH   20
 #define NAME_LENGTH 20
@@ -20,4 +20,4 @@ typedef struct _Student {
 
 Student* newStudent();
 
-#endif // __STUDENT_H__
+#endif STUDENT_H_INCLUDED
