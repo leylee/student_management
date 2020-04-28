@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1588077875 source:d:\google drive\2020´º\cÓïÑÔ³ÌĞòÉè¼Æb-¹ùÆ¼\student_management\student.c
+	<stdio.h>
+	"student.h"
+
+1588077887 d:\google drive\2020´º\cÓïÑÔ³ÌĞòÉè¼Æb-¹ùÆ¼\student_management\student.h
+
+1588078412 source:d:\google drive\2020´º\cÓïÑÔ³ÌĞòÉè¼Æb-¹ùÆ¼\student_management\main.c
+	<stdio.h>
+	<stdlib.h>
+	"student.h"
+
