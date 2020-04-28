@@ -4,7 +4,8 @@
 Node* newNode()
 {
     Node* pt = (Node*) malloc(sizeof(Node));
-    pt->stu = pt->nxt = pt->lst = NULL;
+    pt->stu = NULL;
+    pt->nxt = pt->lst = NULL;
     return pt;
 }
 
@@ -25,7 +26,7 @@ List* newList()
 
 void freeList(List* pt)
 {
-    freeStudent(pt->head);
-    freeStudent(pt->tail);
+    freeNode(pt->head);
+    freeNode(pt->tail);
     free(pt);
 }
