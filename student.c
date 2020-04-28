@@ -4,5 +4,12 @@
 
 Student* newStudent()
 {
-    return (Student*) malloc(sizeof(Student));
+    Student* pt = (Student*) malloc(sizeof(Student));
+    pt->gender = GENDER_OTHER;
+    return pt;
+}
+
+void freeStudent(Student* pt)
+{
+    free(pt);
 }
