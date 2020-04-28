@@ -12,6 +12,7 @@
 				<Option type="1" />
 				<Option compiler="mingw-w64" />
 				<Compiler>
+					<Add option="-Wall" />
 					<Add option="-g" />
 				</Compiler>
 			</Target>
@@ -22,6 +23,7 @@
 				<Option compiler="mingw-w64" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add option="-Wall" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -34,6 +36,10 @@
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="student.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="student.h" />
 		<Extensions>
 			<code_completion />
 			<envvars />
