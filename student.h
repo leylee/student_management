@@ -19,5 +19,6 @@ typedef struct _Student {
 } Student;
 
 Student* newStudent();
+void freeStudent(Student* pt);
 
-#endif STUDENT_H_INCLUDED
+#endif // STUDENT_H_INCLUDED
