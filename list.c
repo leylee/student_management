@@ -21,6 +21,8 @@ List* newList()
     pt->length = 0;
     pt->head = (Node*) malloc(sizeof(Node));
     pt->tail = (Node*) malloc(sizeof(Node));
+    pt->head->nxt = pt->tail;
+    pt->tail->lst = pt->head;
     return pt;
 }
 
