@@ -10,8 +10,8 @@
 #define GENDER_OTHER    0X0
 
 typedef struct _Student {
-    char* id[ID_LENGTH];        // 学号
-    char* name[NAME_LENGTH];    // 姓名
+    char id[ID_LENGTH];        // 学号
+    char name[NAME_LENGTH];    // 姓名
     int gender;                 // 性别
     double score[COURSE_NUM];   // 成绩
     double avg;                 // 平均成绩
