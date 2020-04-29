@@ -33,6 +33,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="file_util.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="file_util.h" />
 		<Unit filename="list.c">
 			<Option compilerVar="CC" />
 		</Unit>
