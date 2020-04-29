@@ -52,3 +52,5 @@ Mkfile.old
 dkms.conf
 *.layout
 student_management.depend
+*.csv
+*.bak
