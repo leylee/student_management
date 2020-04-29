@@ -2,7 +2,6 @@
 #define LIST_H_INCLUDED
 
 #include "student.h"
-#include <stdlib.h>
 
 typedef struct _Node {
     Student* stu;
@@ -18,5 +17,8 @@ Node* newNode();
 void freeNode(Node* pt);
 List* newList();
 void freeList(List* pt);
+void push_back(List* list, Node* node);
+void deleteNode(List* list, Node* node);
+void pop_back(List *list);
 
 #endif // LIST_H_INCLUDED

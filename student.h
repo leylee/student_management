@@ -3,11 +3,19 @@
 
 #define ID_LENGTH   20
 #define NAME_LENGTH 20
-#define COURSE_NUM  10
+#define COURSE_NUM  3
 
 #define GENDER_MALE     0X1
 #define GENDER_FEMALE   0X2
 #define GENDER_OTHER    0X0
+
+static const char* const gender_str[3] = {"other", "male", "female"};
+enum {
+    math, english, physics
+};
+enum {
+    other, male, female
+};
 
 typedef struct _Student {
     char id[ID_LENGTH];        // Ñ§ºÅ
