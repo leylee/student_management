@@ -2,7 +2,9 @@
 #define STUDENT_H_INCLUDED
 
 #define ID_LENGTH   20
+#define ID_SIZE (ID_LENGTH + 2)
 #define NAME_LENGTH 20
+#define NAME_SIZE (NAME_LENGTH + 2)
 #define COURSE_NUM  3
 
 #define GENDER_MALE     0X1
@@ -20,8 +22,8 @@ typedef enum {
 } Gender;
 
 typedef struct _Student {
-    char id[ID_LENGTH];        // 学号
-    char name[NAME_LENGTH];    // 姓名
+    char id[ID_SIZE];        // 学号
+    char name[NAME_SIZE];    // 姓名
     int gender;                 // 性别
     double score[COURSE_NUM];   // 成绩
     double avg;                 // 平均成绩

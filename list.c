@@ -9,8 +9,18 @@ Node* newNode()
 {
     Node* pt = (Node*) malloc(sizeof(Node));
     pt->stu = newStudent();
-    pt->nxt = pt->lst = pt->ori = NULL;
+    pt->nxt = pt->lst = NULL;
+    pt->ori = pt;
     return pt;
+}
+
+/* 从原节点构造新链表中的节点 */
+Node* newNodeFromOri(Node* ori)
+{
+    Node* node = newNode();
+    *node->stu = *ori->stu;
+    node->ori = ori->ori;
+    return node;
 }
 
 /* 析构链表节点 */
@@ -35,6 +45,8 @@ List* newList()
 /* 析构链表 */
 void freeList(List* list)
 {
+    if (!list)
+        return;
     while (list->length)
         pop_back(list);
     freeNode(list->head);
@@ -76,10 +88,7 @@ List* searchById(List *list, const char* id)
     {
         if (strstr(node->stu->id, id) != NULL)
         {
-            Node* target = newNode();
-            *target->stu = *node->stu;
-            target->ori = node;
-            push_back(result, target);
+            push_back(result, newNodeFromOri(node));
         }
         node = node->nxt;
     }
@@ -95,12 +104,40 @@ List* searchByName(List *list, const char* name)
     {
         if (strstr(node->stu->name, name) != NULL)
         {
-            Node* target = newNode();
-            *target->stu = *node->stu;
-            target->ori = node;
-            push_back(result, target);
+            push_back(result, newNodeFromOri(node));
         }
         node = node->nxt;
+    }
+    return result;
+}
+
+/* 按平均分搜索 */
+List* searchByAvgScore(List* list, double minScore, double maxScore)
+{
+    List* result = newList();
+    Node* node = list->head->nxt;
+    while (node->nxt)
+    {
+        if (node->stu->avg >= minScore && node->stu->avg <= maxScore)
+        {
+            push_back(result, newNodeFromOri(node));
+        }
+        node = node->nxt;
+    }
+    return result;
+}
+
+/* 按单科成绩搜索 */
+List* searchByCourseScore(List* list, double minScore, double maxScore, int course)
+{
+    List* result = newList();
+    Node* node = list->head->nxt;
+    while (node->nxt)
+    {
+        if (node->stu->score[course] >= minScore && node->stu->score[course] <= maxScore)
+        {
+            push_back(result, newNodeFromOri(node));
+        }
     }
     return result;
 }

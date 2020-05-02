@@ -20,9 +20,14 @@ void freeList(List* pt);
 void push_back(List* list, Node* node);
 void deleteNode(List* list, Node* node);
 void pop_back(List *list);
+
 List* searchById(List *list, const char* id);
 List* searchByName(List *list, const char* name);
+List* searchByAvgScore(List* list, double minScore, double maxScore);
+List* searchByCourseScore(List* list, double minScore, double maxScore, int course);
+
 void calcList(List *list);
 void deleteListFromOri(List* ori, List* tar);
+
 
 #endif // LIST_H_INCLUDED

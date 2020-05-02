@@ -11,7 +11,11 @@
 
 void clear()
 {
+    #ifdef WIN32
     system("cls");
+    #else
+    system("clear");
+    #endif
 }
 
 int getOpt(int* pt)
@@ -64,134 +68,116 @@ void newRecordUi(List* list)
     stu->gender = getGender("Gender (1: male, 2: female, 0: other): ");
     for (int i = 0; i < COURSE_NUM; ++i)
     {
-        char hint[80] = "a ";
+        char hint[80] = "";
         strcat(hint, course_str[i]);
         strcat(hint, " score (between 0 and 100): ");
         hint[0] = toupper(hint[0]);
         stu->score[i] = getScore(hint);
     }
 
-    /* 重构代码, 此部分代码
-    rewind(stdin);
-    printf("Student ID (less than %i characters): ", ID_LENGTH);
-    fgets(stu->id, ID_LENGTH, stdin);
-    stu->id[strlen(stu->id) - 1] = '\0';
-    rewind(stdin);
-    printf("Name (less than %i characters): ", NAME_LENGTH);
-    fgets(stu->name, NAME_LENGTH, stdin);
-    stu->name[strlen(stu->name) - 1] = '\0';
-    while (true)
-    {
-        printf("Gender (1: male, 2: female, 0: other): ");
-        rewind(stdin);
-        if (scanf("%d", &stu->gender) == 1
-                && stu->gender >= 0 && stu->gender <= 2)
-            break;
-    }
-    while (true)
-    {
-        printf("Math score (between 0 and 100): ");
-        rewind(stdin);
-        if (scanf("%lf", &stu->score[math]) == 1
-                && stu->score[math] >= 0 && stu->score[math] <= 100)
-            break;
-    }
-    while (true)
-    {
-        printf("English score (between 0 and 100): ");
-        rewind(stdin);
-        if (scanf("%lf", &stu->score[english]) == 1
-                && stu->score[english] >= 0 && stu->score[english] <= 100)
-            break;
-    }
-    while (true)
-    {
-        printf("Physics score (between 0 and 100): ");
-        rewind(stdin);
-        if (scanf("%lf", &stu->score[physics]) == 1
-                && stu->score[physics] >= 0 && stu->score[physics] <= 100)
-            break;
-    }
-    */
     calcStu(stu);
     push_back(list, node);
 }
 
 void searchUi(List* list)
 {
-    List* result;
-    char id[ID_LENGTH];
-    char name[NAME_LENGTH];
+    List* result = NULL;
+    char id[ID_SIZE];
+    char name[NAME_SIZE];
+    double minScore, maxScore;
+    int course;
+    bool back = false;
+    bool listIsOri = true;
 
-    clear();
     while (true)
     {
-        bool success;
-        int opt;
-        puts("");
-        puts("Search by:");
-        puts("1. Student ID");
-        puts("2. Name");
-        puts("3. Score");
-        puts("0. Back");
-
-        success = true;
-        if (getOpt(&opt) != 1)
-            continue;
-        switch (opt)
+        clear();
+        printList(list);
+        while (true)
         {
-        case 0:
-            return;
-        case 1:
-            rewind(stdin);
-            printf("Student ID (less than %i characters): ", ID_LENGTH);
-            fgets(id, ID_LENGTH, stdin);
-            id[strlen(id) - 1] = '\0';
-            result = searchById(list, id);
-            break;
-        case 2:
-            rewind(stdin);
-            printf("Name (less than %i characters): ", NAME_LENGTH);
-            fgets(name, NAME_LENGTH, stdin);
-            name[strlen(name) - 1] = '\0';
-            result = searchByName(list, name);
-            break;
-        default:
-            success = false;
-        }
+            bool success;
+            int opt;
+            puts("");
+            puts("Search by:");
+            puts("1. Student ID");
+            puts("2. Name");
+            puts("3. Average core");
+            puts("4. Single course score");
 
-        if (success)
-            break;
-    }
-
-    printList(result);
-
-    bool deleted = false;
-    while (true)
-    {
-        int opt;
-        puts("");
-        puts("1. Back");
-        if (!deleted)
-            puts("2. Delete these records");
-        puts("0. Quit");
-
-        if (getOpt(&opt) != 1)
-            continue;
-        switch (opt)
-        {
-        case 0:
-            exit(0);
-        case 1:
-            return;
-        case 2:
-            if (!deleted)
+            success = true;
+            if (getOpt(&opt) != 1)
+                continue;
+            switch (opt)
             {
-                deleteListFromOri(list, result);
-                deleted = true;
+            case 1:
+                getString("Student ID (less than %i characters): ", id, ID_LENGTH);
+                result = searchById(list, id);
+                break;
+            case 2:
+                getString("Name (less than %i characters): ", name, NAME_LENGTH);
+                result = searchByName(list, name);
+                break;
+            case 3:
+                minScore = getScore("Min score (between 0 and 100): ");
+                maxScore = getScore("Max score (between 0 and 100): ");
+                result = searchByAvgScore(list, minScore, maxScore);
+                break;
+            case 4:
+                course = getCourse("Select course");
+                minScore = getScore("Min score (between 0 and 100): ");
+                maxScore = getScore("Max score (between 0 and 100): ");
+                result = searchByCourseScore(list, minScore, maxScore, course);
+                break;
+            default:
+                success = false;
             }
-            break;
+
+            if (success)
+                break;
         }
+
+        printList(result);
+
+        bool success = false;
+        while (!back && !success)
+        {
+            int opt;
+            puts("");
+            puts("1. Back to main menu");
+            puts("2. Searching from result");
+            puts("3. Delete records in result and back to main menu");
+            puts("0. Quit");
+
+            if (getOpt(&opt) != 1)
+                continue;
+            switch (opt)
+            {
+            case 0:
+                exit(0);
+            case 1:
+                back = true;
+                break;
+            case 2:
+                success = true;
+                break;
+            case 3:
+                deleteListFromOri(list, result);
+                back = true;
+                break;
+            }
+        }
+
+        if (back)
+            break;
+        if (listIsOri)
+        {
+            listIsOri = false;
+        }
+        else
+        {
+            freeList(list);
+        }
+        list = result;
     }
 
     freeList(result);
@@ -227,12 +213,15 @@ int main()
             break;
         case 3:
             searchUi(list);
+            clear();
             break;
         case 4:
             newRecordUi(list);
+            clear();
             puts("Record saved.\n");
             break;
         case 5:
+
             if (writeData(list) < 0)
                 fputs("Failed to save data!\n\n", stderr);
             else

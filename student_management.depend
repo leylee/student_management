@@ -4,9 +4,9 @@
 	<stdio.h>
 	"student.h"
 
-1588427696 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\student.h
+1588430996 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\student.h
 
-1588427976 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\main.c
+1588433278 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\main.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
@@ -17,14 +17,14 @@
 	"file_util.h"
 	"ui.h"
 
-1588425168 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\list.c
+1588432976 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\list.c
 	"student.h"
 	"list.h"
 	<stdlib.h>
 	<string.h>
 	<stdio.h>
 
-1588425236 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\list.h
+1588432556 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\list.h
 	"student.h"
 
 1588150494 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\file_util.c
@@ -37,10 +37,10 @@
 1588126572 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\file_util.h
 	"list.h"
 
-1588427274 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\ui.h
+1588432136 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\ui.h
 	"list.h"
 
-1588428054 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\ui.c
+1588432136 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\ui.c
 	"list.h"
 	<stdio.h>
 	"ui.h"
