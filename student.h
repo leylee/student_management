@@ -10,12 +10,14 @@
 #define GENDER_OTHER    0X0
 
 static const char* const gender_str[3] = {"other", "male", "female"};
-enum {
+static const char* const course_str[COURSE_NUM] = {"math", "English", "physics"};
+
+typedef enum {
     math, english, physics
-};
-enum {
+} Subject;
+typedef enum {
     other, male, female
-};
+} Gender;
 
 typedef struct _Student {
     char id[ID_LENGTH];        // Ñ§ºÅ
@@ -28,8 +30,6 @@ typedef struct _Student {
 
 Student* newStudent();
 void freeStudent(Student* pt);
-
-void printTitle();
-void printItem(Node *node);
+void calcStu(Student *stu);
 
 #endif // STUDENT_H_INCLUDED
