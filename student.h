@@ -29,4 +29,7 @@ typedef struct _Student {
 Student* newStudent();
 void freeStudent(Student* pt);
 
+void printTitle();
+void printItem(Node *node);
+
 #endif // STUDENT_H_INCLUDED

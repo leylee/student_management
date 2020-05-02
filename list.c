@@ -30,17 +30,6 @@ List* newList()
     return list;
 }
 
-/* 析构链表中的所有节点 */
-void freeNodeList(Node* pt)
-{
-    if (pt == NULL)
-        return;
-
-    Node* nxt = pt->nxt;
-    freeNode(pt);
-    freeNodeList(nxt);
-}
-
 /* 析构链表 */
 void freeList(List* list)
 {
@@ -74,4 +63,16 @@ void deleteNode(List* list, Node* node)
 void pop_back(List *list)
 {
     deleteNode(list, list->tail->lst);
+}
+
+/* 按学号精准搜索 */
+Node* searchById(List *list, const char* id)
+{
+    Node* node = list->head->nxt;
+    while (node->nxt != NULL)
+    {
+        if (strcpy(node->stu->id, id) == 0)
+            return node;
+    }
+    return NULL;
 }

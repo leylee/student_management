@@ -9,14 +9,11 @@
 
 void printList(List* list)
 {
-    printf("%11s%10s%7s%6s%8s%8s%8s%7s\n", "ID", "Name", "Gender", "Math", "English", "Physics", "Average", "Sum");
-    puts("----------- --------- ------ ----- ------- ------- ------- ------");
+    printTitle();
     Node* node = list->head->nxt;
     while (node->nxt != NULL)
     {
-        Student *stu = node->stu;
-        printf("%11s%10s%7s\n", stu->id, stu->name, gender_str[stu->gender]);
-
+        printItem(node);
         node = node->nxt;
     }
 }
@@ -32,7 +29,7 @@ int getOpt(int* pt)
     return scanf("%d", pt);
 }
 
-void initData(List* list)
+void initDataUi(List* list)
 {
     int opt;
     bool success = false;
@@ -40,7 +37,7 @@ void initData(List* list)
     puts("Welcome to Student Manager!");
     while (!success)
     {
-        puts("Load student data from file?");
+        puts("\nLoad student data from file?");
         puts("1. Yes");
         puts("2. No, create a new file to save student data");
         puts("0. Exit");
@@ -64,7 +61,7 @@ void initData(List* list)
     }
 }
 
-void newRecord(List* list)
+void newRecordUi(List* list)
 {
     clear();
     Node* node = newNode();
@@ -113,24 +110,32 @@ void newRecord(List* list)
     push_back(list, node);
 }
 
+void searchUi(List* list)
+{
+    clear();
+    char
+}
+
 int main()
 {
     List* list = newList();
-    initData(list);
+    initDataUi(list);
     printList(list);
+    clear();
     while (true)
     {
         int opt;
+        puts("Choose option: ");
         puts("1. List all records");
         puts("2. List sorted records");
         puts("3. Search records");
         puts("4. Add a new record");
         puts("5. Save changes");
         puts("0. Exit");
-        clear();
 
         if (getOpt(&opt) != 1)
             continue;
+        clear();
         switch (opt)
         {
         case 0:
@@ -138,8 +143,11 @@ int main()
         case 1:
             printList(list);
             break;
+        case 2:
+            searchUi(list);
+            break;
         case 4:
-            newRecord(list);
+            newRecordUi(list);
             puts("Record saved.\n");
             break;
         case 5:
