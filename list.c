@@ -18,7 +18,7 @@ Node* newNode()
 }
 
 /** 从原节点构造新链表中的节点 */
-Node* newNodeFromOri(Node* ori)
+static Node* newNodeFromOri(Node* ori)
 {
     Node* node = newNode();
     *node->stu = *ori->stu;
@@ -27,7 +27,7 @@ Node* newNodeFromOri(Node* ori)
 }
 
 /** 析构链表节点 */
-void freeNode(Node* node)
+static void freeNode(Node* node)
 {
     freeStudent(node->stu);
     free(node);
@@ -81,7 +81,7 @@ void push_back(List* list, Node* node)
 }
 
 /** 删除链表中的节点 */
-void deleteNode(List* list, Node* node)
+static void deleteNode(List* list, Node* node)
 {
     list->length--;
     node->lst->nxt = node->nxt;

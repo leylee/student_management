@@ -28,12 +28,10 @@ typedef struct _List {
 Node* newNode();
 List* newList();
 List* newListFromOri(List* ori);
-void freeNode(Node* pt);
 void freeList(List* pt);
 
 void push_back(List* list, Node* node);
 void pop_back(List *list);
-void deleteNode(List* list, Node* node);
 void deleteListFromOri(List* ori, List* tar);
 
 List* searchById(List *list, const char* id);

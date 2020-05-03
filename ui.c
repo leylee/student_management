@@ -28,14 +28,21 @@ bool getOpt(int* pt)
 }
 
 /** 打印一条学生信息 */
-void printStu(Student *stu)
+static void printStu(Student *stu)
 {
     printf("%4d%11s%10s%7s%6.2f%8.2f%8.2f%8.2f%7.2f\n", stu->rank, stu->id, stu->name, gender_str[stu->gender],
             stu->score[math], stu->score[english], stu->score[physics], stu->avg, stu->sum);
 }
 
+/** 打印表头 */
+static void printTitle()
+{
+    printf("%4s%11s%10s%7s%6s%8s%8s%8s%7s\n", "Rank", "ID", "Name", "Gender", "Math", "English", "Physics", "Average", "Sum");
+    puts("---- ---------- --------- ------ ----- ------- ------- ------- ------");
+}
+
 /** 打印链表 */
-void printList(List* list)
+ void printList(List* list)
 {
     printTitle();
     Node* node = list->head->nxt;
@@ -46,20 +53,13 @@ void printList(List* list)
     }
 }
 
-/** 打印表头 */
-void printTitle()
-{
-    printf("%4s%11s%10s%7s%6s%8s%8s%8s%7s\n", "Rank", "ID", "Name", "Gender", "Math", "English", "Physics", "Average", "Sum");
-    puts("---- ---------- --------- ------ ----- ------- ------- ------- ------");
-}
-
 /** 以下的 getXxx 函数为读取信息的函数
  * hint 参数为读取时的提示语.
  * 读取失败时, 自动使用 rewind(stdin); 清空输入缓冲区,
  * 并重新输出提示语, 等待用户输入.
  */
 /* 读入分数, 范围 0-100 */
-double getScore(const char* hint)
+static double getScore(const char* hint)
 {
     double score;
     while (true)
@@ -75,7 +75,7 @@ double getScore(const char* hint)
 }
 
 /* 读入性别, 范围 0-2 */
-int getGender(const char* hint)
+static int getGender(const char* hint)
 {
     int gender;
     while (true)
@@ -91,7 +91,7 @@ int getGender(const char* hint)
 }
 
 /* 读入字符串, 缓冲区和字符串长度 (长度不包含空白符) 由参数给定 */
-void getString(const char* hint, char* str, int length)
+static void getString(const char* hint, char* str, int length)
 {
     if (hint)
         printf(hint, length);
@@ -101,7 +101,7 @@ void getString(const char* hint, char* str, int length)
 }
 
 /* 读入课程, 范围0到COURSE_NUM */
-int getCourse(const char* hint)
+static int getCourse(const char* hint)
 {
     int course;
     while (true)
@@ -123,7 +123,7 @@ int getCourse(const char* hint)
 }
 
 /* 读入排名 */
-int getRank(const char* hint)
+static int getRank(const char* hint)
 {
     int rank;
     while (true)
@@ -136,7 +136,7 @@ int getRank(const char* hint)
 }
 
 /** 改变字符串首字母为大写字母 */
-char* captialize(char* str)
+static char* captialize(char* str)
 {
     str[0] = toupper(str[0]);
     return str;
@@ -199,7 +199,7 @@ void newRecordUi(List* list)
 }
 
 /** 查找记录界面 */
-List* searchUi(List* list)
+static List* searchUi(List* list)
 {
     char id[ID_SIZE];
     char name[NAME_SIZE];
@@ -248,7 +248,7 @@ List* searchUi(List* list)
 }
 
 /** 输出数据分析的界面, 如及格人数等 */
-void analyzeUi(List* list)
+static void analyzeUi(List* list)
 {
     double courseAvg[COURSE_NUM], sumAvg, avgAvg; // 单科平均成绩, 平均成绩的平均成绩, 总分的平均成绩
     int courseLetter[COURSE_NUM][5] = {0}, avgLetter[5] = {0}; // 单科和平均分各个字母评级的人数, 初始化为0
@@ -293,7 +293,7 @@ void analyzeUi(List* list)
 }
 
 /** 排序界面 */
-void sortUi(List* list)
+static void sortUi(List* list)
 {
     int course;
     int opt;

@@ -1,11 +1,11 @@
 # depslib dependency file v1.0
-1588516796 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\student.c
+1588519712 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\student.c
 	<stdlib.h>
 	<stdio.h>
 	"student.h"
 	<string.h>
 
-1588516736 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\student.h
+1588519712 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\student.h
 
 1588517812 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\main.c
 	<stdio.h>
