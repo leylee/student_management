@@ -1,3 +1,5 @@
+/* main.c */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
@@ -23,7 +25,7 @@ int main()
             puts("2. Save changes");
             puts("3. View records");
             puts("0. Quit");
-        } while (!getOpt(&opt) && opt >= 0 && opt <= 3);
+        } while (!getOpt(&opt) || opt < 0 || opt > 3);
 
         clear();
         switch (opt)

@@ -1,3 +1,5 @@
+/* ui.c */
+
 #include "list.h"
 #include <stdio.h>
 #include "ui.h"
@@ -7,9 +9,10 @@
 #include <stdlib.h>
 #include "file_util.h"
 
-/* 清屏函数 */
+/** 清屏函数 */
 void clear()
 {
+    /* Windows 系统中的清屏和 *nix 的不同 */
     #ifdef WIN32
     system("cls");
     #else
@@ -17,21 +20,21 @@ void clear()
     #endif
 }
 
-/* 获取选项, 成功返回 true, 失败返回 false */
+/** 获取选项, 成功返回 true, 失败返回 false */
 bool getOpt(int* pt)
 {
     rewind(stdin);
     return scanf("%d", pt) == 1;
 }
 
-/* 打印节点 */
+/** 打印一条学生信息 */
 void printStu(Student *stu)
 {
     printf("%4d%11s%10s%7s%6.2f%8.2f%8.2f%8.2f%7.2f\n", stu->rank, stu->id, stu->name, gender_str[stu->gender],
             stu->score[math], stu->score[english], stu->score[physics], stu->avg, stu->sum);
 }
 
-/* 打印链表 */
+/** 打印链表 */
 void printList(List* list)
 {
     printTitle();
@@ -43,13 +46,18 @@ void printList(List* list)
     }
 }
 
-/* 打印表头 */
+/** 打印表头 */
 void printTitle()
 {
     printf("%4s%11s%10s%7s%6s%8s%8s%8s%7s\n", "Rank", "ID", "Name", "Gender", "Math", "English", "Physics", "Average", "Sum");
     puts("---- ---------- --------- ------ ----- ------- ------- ------- ------");
 }
 
+/** 以下的 getXxx 函数为读取信息的函数
+ * hint 参数为读取时的提示语.
+ * 读取失败时, 自动使用 rewind(stdin); 清空输入缓冲区,
+ * 并重新输出提示语, 等待用户输入.
+ */
 /* 读入分数, 范围 0-100 */
 double getScore(const char* hint)
 {
@@ -92,7 +100,7 @@ void getString(const char* hint, char* str, int length)
     str[strlen(str) - 1] = '\0';
 }
 
-/* 读入课程 */
+/* 读入课程, 范围0到COURSE_NUM */
 int getCourse(const char* hint)
 {
     int course;
@@ -127,29 +135,30 @@ int getRank(const char* hint)
     return rank;
 }
 
-/* 改变字符串首字母为大写字母 */
+/** 改变字符串首字母为大写字母 */
 char* captialize(char* str)
 {
     str[0] = toupper(str[0]);
     return str;
 }
 
-/* 程序开始时, 询问数据来源的界面 */
+/** 程序开始时, 询问数据来源的界面
+ * 从文件读入, 或使用空白的链表
+ */
 void initDataUi(List* list)
 {
     int opt;
-    bool success = false;
     clear();
     puts("Welcome to Student Manager!");
-    while (!success)
+    while (true)
     {
-        puts("\nLoad student data from file?");
-        puts("1. Yes");
-        puts("2. No, create a new file to save student data");
-        puts("0. Quit");
+        do {
+            puts("\nLoad student data from file?");
+            puts("1. Yes");
+            puts("2. No, create a new file to save student data");
+            puts("0. Quit");
+        } while (!getOpt(&opt) || opt < 0 || opt > 2);
 
-        if (!getOpt(&opt))
-            continue;
         switch (opt)
         {
         case 0:
@@ -158,16 +167,16 @@ void initDataUi(List* list)
             if (readData(list) < 0)
                 fputs("No saved data file found!\n\n", stderr);
             else
-                success = true;
+                return;
             break;
         case 2:
-            success = true;
+            return;
             break;
         }
     }
 }
 
-/* 添加新记录界面 */
+/** 添加新的学生记录界面 */
 void newRecordUi(List* list)
 {
     clear();
@@ -189,10 +198,9 @@ void newRecordUi(List* list)
     push_back(list, node);
 }
 
-/* 查找界面 */
-List* searchUi(List* ori)
+/** 查找记录界面 */
+List* searchUi(List* list)
 {
-    List* list = newListFromOri(ori);
     char id[ID_SIZE];
     char name[NAME_SIZE];
     double minScore, maxScore;
@@ -200,9 +208,8 @@ List* searchUi(List* ori)
     int course;
 
     clear();
-    while (true)
-    {
-        int opt;
+    int opt;
+    do {
         puts("");
         puts("Search by:");
         puts("1. Student ID");
@@ -211,39 +218,41 @@ List* searchUi(List* ori)
         puts("4. Single course score");
         puts("5. Rank");
 
-        if (!getOpt(&opt))
-            continue;
-        switch (opt)
-        {
-        case 1:
-            getString("Student ID (less than %i characters): ", id, ID_LENGTH);
-            return searchById(list, id);
-        case 2:
-            getString("Name (less than %i characters): ", name, NAME_LENGTH);
-            return searchByName(list, name);
-        case 3:
-            minScore = getScore("Min score (between 0 and 100): ");
-            maxScore = getScore("Max score (between 0 and 100): ");
-            return searchByAvgScore(list, minScore, maxScore);
-        case 4:
-            course = getCourse("Select course: ");
-            minScore = getScore("Min score (between 0 and 100): ");
-            maxScore = getScore("Max score (between 0 and 100): ");
-            return searchByCourseScore(list, minScore, maxScore, course);
-        case 5:
-            minRank = getRank("Rank from: ");
-            maxRank = getRank("To: ");
-            return searchByRank(list, minRank, maxRank);
-        }
+    } while (!getOpt(&opt) || opt < 1 || opt > 5);
+    switch (opt)
+    {
+    case 1:
+        getString("Student ID (less than %i characters): ", id, ID_LENGTH);
+        return searchById(list, id);
+    case 2:
+        getString("Name (less than %i characters): ", name, NAME_LENGTH);
+        return searchByName(list, name);
+    case 3:
+        minScore = getScore("Min score (between 0 and 100): ");
+        maxScore = getScore("Max score (between 0 and 100): ");
+        return searchByAvgScore(list, minScore, maxScore);
+    case 4:
+        course = getCourse("Select course: ");
+        minScore = getScore("Min score (between 0 and 100): ");
+        maxScore = getScore("Max score (between 0 and 100): ");
+        return searchByCourseScore(list, minScore, maxScore, course);
+    case 5:
+        minRank = getRank("Rank from: ");
+        maxRank = getRank("To: ");
+        return searchByRank(list, minRank, maxRank);
+    /* 加入 default 分支, 消除编译器的无返回值警告 */
+    default:
+        fputs("Error in searchUi!", stderr);
+        return newList();
     }
 }
 
-/* 输出数据分析的界面, 如及格人数等 */
+/** 输出数据分析的界面, 如及格人数等 */
 void analyzeUi(List* list)
 {
-    double courseAvg[COURSE_NUM], sumAvg, avgAvg;
-    int courseLetter[COURSE_NUM][5] = {0}, avgLetter[5] = {0};
-    const char letter_char[] = {'A', 'B', 'C', 'D', 'F'};
+    double courseAvg[COURSE_NUM], sumAvg, avgAvg; // 单科平均成绩, 平均成绩的平均成绩, 总分的平均成绩
+    int courseLetter[COURSE_NUM][5] = {0}, avgLetter[5] = {0}; // 单科和平均分各个字母评级的人数, 初始化为0
+    const char letter_char[] = {'A', 'B', 'C', 'D', 'F'}; // 字母评级序号对应的字母
     for (int i = 0; i < COURSE_NUM; ++i)
     {
         courseAvg[i] = calcCourseAvg(list, i);
@@ -254,6 +263,7 @@ void analyzeUi(List* list)
     calcAvgLetter(list, avgLetter);
 
     clear();
+    /* 输出平均成绩 */
     puts("Average score of:");
     for (int i = 0; i < COURSE_NUM; ++i)
     {
@@ -264,6 +274,7 @@ void analyzeUi(List* list)
     printf("\t%-7s:%6.2f\n", "Average", avgAvg);
     printf("\t%-7s:%6.2f\n", "Sum", sumAvg);
     puts("");
+    /* 输出字母评级人数及百分比 */
     puts("Letter score number and percentage of:");
     puts("(A: 90+; B: 80+; C: 70+; D: 60+; F: 60-)");
     for (int i = 0; i < COURSE_NUM; ++i)
@@ -281,7 +292,7 @@ void analyzeUi(List* list)
                avgLetter[i], (double) avgLetter[i] * 100. / list->length);
 }
 
-/* 排序界面 */
+/** 排序界面 */
 void sortUi(List* list)
 {
     int course;
@@ -296,7 +307,7 @@ void sortUi(List* list)
         puts("3. Average / sum score");
         puts("4. Single course score");
         puts("5. rank");
-    } while(!getOpt(&opt) && opt >= 1 && opt <= 5);
+    } while(!getOpt(&opt) || opt < 1 || opt > 5);
 
     if (opt == 4)
     {
@@ -307,30 +318,37 @@ void sortUi(List* list)
         puts("Order:");
         puts("0. Ascending");
         puts("1. Descending");
-    } while (!getOpt(&reverseOpt) && opt >= 0 && opt <= 1);
+    } while (!getOpt(&reverseOpt) || opt < 0 || opt > 1);
     reverse = (bool) reverseOpt;
 
     switch (opt)
     {
     case 1:
-        sortList(list, ORDER_ID, reverse);
+        sortList(list, KEY_ID, reverse);
         break;
     case 2:
-        sortList(list, ORDER_NAME, reverse);
+        sortList(list, KEY_NAME, reverse);
         break;
     case 3:
-        sortList(list, ORDER_AVERAGE, reverse);
+        sortList(list, KEY_AVERAGE, reverse);
         break;
     case 4:
         sortList(list, course, reverse);
         break;
     case 5:
-        sortList(list, ORDER_RANK, reverse);
+        sortList(list, KEY_RANK, reverse);
         break;
     }
 }
 
-/* 查看并操作记录的界面 */
+/** 查看并操作记录的界面
+ * 此界面集成查找记录, 数据分析, 排序, 和删除功能.
+ * 进入此菜单后, 会生成一份学生数据的拷贝.
+ * 每次查找时, 将会更新当前的学生列表.
+ * 统计数据, 排序, 删除记录时, 均在当前的列表内操作.
+ * 排序后, 可以重新为记录排名. 只有当 Re-rank 时, 每个人的排名会变化.
+ * 此种设计模式, 可以实现多轮查找, 更加精准.
+ */
 void viewRecordsUi(List* ori)
 {
     List* list = newListFromOri(ori);
@@ -344,17 +362,17 @@ void viewRecordsUi(List* ori)
     {
         printList(list);
         int opt;
-        puts("");
-        puts("1. Back to main menu");
-        puts("2. Search from result");
-        puts("3. Analyze result");
-        puts("4. Sort result");
-        puts("5. Re-rank records");
-        puts("6. Delete records in result and back to main menu");
-        puts("0. Quit");
+        do {
+            puts("");
+            puts("1. Back to main menu");
+            puts("2. Search from result");
+            puts("3. Analyze result");
+            puts("4. Sort result");
+            puts("5. Re-rank records");
+            puts("6. Delete records in result and back to main menu");
+            puts("0. Quit");
+        } while (!getOpt(&opt) || opt < 0 || opt > 6);
 
-        if (!getOpt(&opt))
-            continue;
         switch (opt)
         {
         case 0:

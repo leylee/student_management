@@ -1,3 +1,5 @@
+/* list.c */
+
 #include "student.h"
 #include "list.h"
 #include <stdlib.h>
@@ -5,33 +7,33 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-/* 构造链表节点 */
+/** 构造链表节点 */
 Node* newNode()
 {
-    Node* pt = (Node*) malloc(sizeof(Node));
-    pt->stu = newStudent();
-    pt->nxt = pt->lst = NULL;
-    pt->ori = pt;
-    return pt;
+    Node* node = (Node*) malloc(sizeof(Node));
+    node->stu = newStudent();
+    node->nxt = node->lst = NULL;
+    node->ori = node; // 初始时, ori 指向自己
+    return node;
 }
 
-/* 从原节点构造新链表中的节点 */
+/** 从原节点构造新链表中的节点 */
 Node* newNodeFromOri(Node* ori)
 {
     Node* node = newNode();
     *node->stu = *ori->stu;
-    node->ori = ori->ori;
+    node->ori = ori->ori; // 此处, 令新节点与源节点的祖先相同, 即可实现多次复制, 以达到连续查找并删除结果的目的
     return node;
 }
 
-/* 析构链表节点 */
-void freeNode(Node* pt)
+/** 析构链表节点 */
+void freeNode(Node* node)
 {
-    freeStudent(pt->stu);
-    free(pt);
+    freeStudent(node->stu);
+    free(node);
 }
 
-/* 构造链表 */
+/** 构造链表 */
 List* newList()
 {
     List* list = (List*) malloc(sizeof(List));
@@ -43,7 +45,7 @@ List* newList()
     return list;
 }
 
-/* 从原链表复制一个新链表 */
+/** 从原链表复制一个新链表 */
 List* newListFromOri(List* ori)
 {
     List* list = newList();
@@ -56,7 +58,7 @@ List* newListFromOri(List* ori)
     return list;
 }
 
-/* 析构链表 */
+/** 析构链表 */
 void freeList(List* list)
 {
     if (!list)
@@ -68,7 +70,7 @@ void freeList(List* list)
     free(list);
 }
 
-/* 向链表后部添加节点 */
+/** 向链表后部追加节点 */
 void push_back(List* list, Node* node)
 {
     list->length++;
@@ -78,7 +80,7 @@ void push_back(List* list, Node* node)
     node->nxt->lst = node;
 }
 
-/* 删除链表中的节点 */
+/** 删除链表中的节点 */
 void deleteNode(List* list, Node* node)
 {
     list->length--;
@@ -87,12 +89,17 @@ void deleteNode(List* list, Node* node)
     freeNode(node);
 }
 
-/* 删除链表尾部节点 */
+/** 删除链表尾部节点 */
 void pop_back(List *list)
 {
     deleteNode(list, list->tail->lst);
 }
 
+/**
+ * 以下为链表的搜索函数.
+ * 搜索函数会为搜索结果分配空间, 并返回搜索结果.
+ * 返回的结果必须调用析构函数, 否则会造成内存泄漏.
+ */
 /* 按学号模糊搜索 */
 List* searchById(List *list, const char* id)
 {
@@ -142,7 +149,7 @@ List* searchByAvgScore(List* list, double minScore, double maxScore)
 }
 
 /* 按单科成绩搜索 */
-List* searchByCourseScore(List* list, double minScore, double maxScore, int course)
+List* searchByCourseScore(List* list, double minScore, double maxScore, Course course)
 {
     List* result = newList();
     Node* node = list->head->nxt;
@@ -157,7 +164,7 @@ List* searchByCourseScore(List* list, double minScore, double maxScore, int cour
     return result;
 }
 
-/* 按排名查找 */
+/* 按排名搜索 */
 List* searchByRank(List* list, int minRank, int maxRank)
 {
     List* result = newList();
@@ -173,7 +180,7 @@ List* searchByRank(List* list, int minRank, int maxRank)
     return result;
 }
 
-/* 计算链表分数数据 */
+/** 计算链表中学生总分, 平均分数据 */
 void calcList(const List *list)
 {
     Node* node = list->head->nxt;
@@ -184,8 +191,8 @@ void calcList(const List *list)
     }
 }
 
-/* 计算单科平均分 */
-double calcCourseAvg(const List* list, int course)
+/** 计算单科平均分. */
+double calcCourseAvg(const List* list, Course course)
 {
     double sum = 0;
     Node* node = list->head->nxt;
@@ -197,7 +204,7 @@ double calcCourseAvg(const List* list, int course)
     return sum / list->length;
 }
 
-/* 计算总分的平均分 */
+/** 计算总分的平均分 */
 double calcSumAvg(const List* list)
 {
     double sum = 0;
@@ -210,6 +217,9 @@ double calcSumAvg(const List* list)
     return sum / list->length;
 }
 
+/** 计算单科的字母等级所包含的人数.
+ * 其中, A: 90+; B: 80+; C: 70+ D: 60+; F: 不及格.
+ */
 void calcCourseLetter(const List* list, int cnt[COURSE_NUM][5])
 {
     const Node* node = list->head->nxt;
@@ -232,6 +242,7 @@ void calcCourseLetter(const List* list, int cnt[COURSE_NUM][5])
     }
 }
 
+/** 计算平均分字母等级 */
 void calcAvgLetter(const List* list, int cnt[5])
 {
     const Node* node = list->head->nxt;
@@ -251,7 +262,9 @@ void calcAvgLetter(const List* list, int cnt[5])
     }
 }
 
-/* 删除所有存在于新链表中的原链表节点 */
+/** 删除所有 ori 链表中, 存在于 tar 中的节点
+ * 不可使用此函数删除一次以上的同一节点.
+ */
 void deleteListFromOri(List* ori, List* tar)
 {
     Node* node = tar->head->nxt;
@@ -262,7 +275,7 @@ void deleteListFromOri(List* ori, List* tar)
     }
 }
 
-/* 交换两个节点的顺序 */
+/** 交换两个节点的顺序 */
 void swapNode(Node* a, Node *b)
 {
     a->lst->nxt = b;
@@ -273,26 +286,30 @@ void swapNode(Node* a, Node *b)
     b->nxt = a;
 }
 
-/* 对链表进行排序, 采用冒泡排序, 时间复杂度 O(n^2) */
-/* order 为搜索关键字, 若为非负整数, 则使用该数代表的课程为关键字比较.
+/** 对链表进行排序, 采用冒泡排序, 时间复杂度 O(n^2)
+ * key 为搜索关键字, 若为非负整数, 则使用该数代表的课程为关键字比较.
  * 若为其他常量, 则按照给定的关键字排序.
+ * reverse 为排序顺序. false 为升序, true 为降序
  */
-void sortList(List* list, int order, bool reverse)
+void sortList(List* list, int key, bool reverse)
 {
-    int (*cmp) (const Student* a, const Student* b, int order) = NULL;
+    // cmp 是个函数指针, 用于存储函数. 如果这里看不懂, 可以上网查找相关资料
+    int (*cmp) (const Student* a, const Student* b, int key) = NULL;
 
-    switch (order)
+    /* 根据key的值, 决定排序的关键字.
+    如果key为负值, 则按照定义确定函数; 否则, 将key看做course的序号, 按照course查找.*/
+    switch (key)
     {
-    case ORDER_AVERAGE:
+    case KEY_AVERAGE:
         cmp = cmpAvg;
         break;
-    case ORDER_ID:
+    case KEY_ID:
         cmp = cmpId;
         break;
-    case ORDER_NAME:
+    case KEY_NAME:
         cmp = cmpName;
         break;
-    case ORDER_RANK:
+    case KEY_RANK:
         cmp = cmpRank;
         break;
     default:
@@ -300,13 +317,15 @@ void sortList(List* list, int order, bool reverse)
         break;
     }
 
+    /* 冒泡法排序 */
     int times = list->length;
     while (--times)
     {
         Node* node = list->head->nxt;
         while (node->nxt && node->nxt->nxt)
         {
-            if ((cmp(node->stu, node->nxt->stu, order) > 0) != reverse)
+            /* 如果发生了交换, 则node指向的节点已经被后移了一位, 因此无需改变node的值. */
+            if ((cmp(node->stu, node->nxt->stu, key) > 0) != reverse) // 若降序排列, 则取异或
             {
                 swapNode(node, node->nxt);
             }
@@ -318,6 +337,7 @@ void sortList(List* list, int order, bool reverse)
     }
 }
 
+/** 将链表中学生的 Rank 从新从 1 编号 */
 void rankList(List* list)
 {
     Node* node = list->head->nxt;

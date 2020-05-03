@@ -1,17 +1,28 @@
+/* list.h */
+
 #ifndef LIST_H_INCLUDED
 #define LIST_H_INCLUDED
 
 #include "student.h"
 #include <stdbool.h>
 
+/** sortList 的 key 关键字定义 */
+#define KEY_AVERAGE   -0x1
+#define KEY_ID        -0x2
+#define KEY_NAME      -0x3
+#define KEY_RANK      -0x4
+
+/** 双向链表节点 */
 typedef struct _Node {
-    Student* stu;
-    struct _Node *lst, *nxt, *ori;
+    Student* stu;               // 节点的学生信息
+    struct _Node *lst, *nxt;    // 节点的双向指针
+    struct _Node *ori;          // 用于复制节点时, 存储原节点的位置, 以实现从原链表中删除该节点的操作
 } Node;
 
+/** 双向链表 */
 typedef struct _List {
-    int length;
-    Node *head, *tail;
+    int length;         // 链表长度
+    Node *head, *tail;  // 链表头尾各插入一个辅助节点,
 } List;
 
 Node* newNode();
@@ -21,23 +32,23 @@ void freeNode(Node* pt);
 void freeList(List* pt);
 
 void push_back(List* list, Node* node);
+void pop_back(List *list);
 void deleteNode(List* list, Node* node);
 void deleteListFromOri(List* ori, List* tar);
-void pop_back(List *list);
 
 List* searchById(List *list, const char* id);
 List* searchByName(List *list, const char* name);
 List* searchByAvgScore(List* list, double minScore, double maxScore);
-List* searchByCourseScore(List* list, double minScore, double maxScore, int course);
+List* searchByCourseScore(List* list, double minScore, double maxScore, Course course);
 List* searchByRank(List* list, int minRank, int maxRank);
 
 void calcList(const List *list);
-double calcCourseAvg(const List* list, int course);
+double calcCourseAvg(const List* list, Course course);
 double calcSumAvg(const List* list);
 void calcCourseLetter(const List* list, int cnt[COURSE_NUM][5]);
 void calcAvgLetter(const List* list, int cnt[5]);
 
-void sortList(List* list, int order, bool reverse);
+void sortList(List* list, int key, bool reverse);
 void rankList(List* list);
 
 #endif // LIST_H_INCLUDED

@@ -1,21 +1,26 @@
+/* student.c */
+
 #include <stdlib.h>
 #include <stdio.h>
 #include "student.h"
 #include <string.h>
 
+/** 构造 Student 结构体 */
 Student* newStudent()
 {
     Student* pt = (Student*) malloc(sizeof(Student));
     pt->rank = 0;
-    pt->gender = GENDER_OTHER;
+    pt->gender = other;
     return pt;
 }
 
+/** 析构 Student 结构体 */
 void freeStudent(Student* pt)
 {
     free(pt);
 }
 
+/** 计算学生的总成绩, 平均成绩 */
 void calcStu(Student *stu)
 {
     stu->sum = 0;
@@ -24,6 +29,11 @@ void calcStu(Student *stu)
     stu->avg = stu->sum / COURSE_NUM;
 }
 
+/**
+ * 以下是比较函数, 用于排序
+ * 若 a < b, 返回 -1; 若 a = b, 返回 0; 若 a > b, 返回 1
+ * 仅当比较关键字为单科时, 最后一个参数表示课程序号. 否则为无效参数.
+ */
 int cmpId(const Student* a, const Student* b, int meaninglessArg)
 {
     return strcmp(a->id, b->id);

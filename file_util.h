@@ -1,3 +1,5 @@
+/* file_util.h */
+
 #ifndef FILE_UTIL_H_INCLUDED
 #define FILE_UTIL_H_INCLUDED
 #include "list.h"
