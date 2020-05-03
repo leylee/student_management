@@ -3,6 +3,7 @@
 #include "ui.h"
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 
 /* ´òÓ¡½Úµã */
 void printStu(Student *stu)
@@ -87,4 +88,10 @@ int getCourse(const char* hint)
             break;
     }
     return course;
+}
+
+char* captialize(char* str)
+{
+    str[0] = toupper(str[0]);
+    return str;
 }

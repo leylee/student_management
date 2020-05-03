@@ -50,6 +50,7 @@ List* newListFromOri(List* ori)
     while (node->nxt)
     {
         push_back(list, newNodeFromOri(node));
+        node = node->nxt;
     }
     return list;
 }
@@ -155,7 +156,7 @@ List* searchByCourseScore(List* list, double minScore, double maxScore, int cour
 }
 
 /* 计算链表分数数据 */
-void calcList(List *list)
+void calcList(const List *list)
 {
     Node* node = list->head->nxt;
     while (node->nxt)
@@ -166,8 +167,73 @@ void calcList(List *list)
 }
 
 /* 计算单科平均分 */
-void calcList()
+double calcCourseAvg(const List* list, int course)
+{
+    double sum = 0;
+    Node* node = list->head->nxt;
+    while (node->nxt)
+    {
+        sum += node->stu->score[course];
+        node = node->nxt;
+    }
+    return sum / list->length;
+}
 
+/* 计算总分的平均分 */
+double calcSumAvg(const List* list)
+{
+    double sum = 0;
+    Node* node = list->head->nxt;
+    while (node->nxt)
+    {
+        sum += node->stu->sum;
+        node = node->nxt;
+    }
+    return sum / list->length;
+}
+
+void calcCourseLetter(const List* list, int cnt[COURSE_NUM][5])
+{
+    const Node* node = list->head->nxt;
+    while (node->nxt)
+    {
+        for (int i = 0; i < COURSE_NUM; ++i)
+        {
+            if (node->stu->score[i] >= 90)
+                ++cnt[i][0];
+            else if (node->stu->score[i] >= 80)
+                ++cnt[i][1];
+            else if (node->stu->score[i] >= 70)
+                ++cnt[i][2];
+            else if (node->stu->score[i] >= 60)
+                ++cnt[i][3];
+            else
+                ++cnt[i][4];
+        }
+        node = node->nxt;
+    }
+}
+
+void calcAvgLetter(const List* list, int cnt[5])
+{
+    const Node* node = list->head->nxt;
+    while (node->nxt)
+    {
+        if (node->stu->avg >= 90)
+            ++cnt[0];
+        else if (node->stu->avg >= 80)
+            ++cnt[1];
+        else if (node->stu->avg >= 70)
+            ++cnt[2];
+        else if (node->stu->avg >= 60)
+            ++cnt[3];
+        else
+            ++cnt[4];
+        node = node->nxt;
+    }
+}
+
+/* 删除所有存在于新链表中的原链表节点 */
 void deleteListFromOri(List* ori, List* tar)
 {
     Node* node = tar->head->nxt;
@@ -175,5 +241,30 @@ void deleteListFromOri(List* ori, List* tar)
     {
         deleteNode(ori, node->ori);
         node = node->nxt;
+    }
+}
+
+/* 对链表进行排序, 采用冒泡排序, 时间复杂度 O(n^2) */
+/* order 为搜索关键字, 若为非负整数, 则使用该数代表的课程为关键字比较.
+ * 若为其他常量, 则按照给定的关键字排序.
+ */
+void sortList(List* list, int order, bool reverse)
+{
+    int (*cmp) (const Student* Student a, const Student* b, int arg) = NULL;
+
+    switch (order)
+    {
+    case ORDER_AVERAGE:
+        cmp = cmpAvg;
+        break;
+    case ORDER_ID:
+        cmp = cmpId;
+        break;
+    case ORDER_NAME:
+        cmp = cmpName;
+        break;
+    default:
+        cmp = cmpCourse;
+        break;
     }
 }

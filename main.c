@@ -79,6 +79,48 @@ void newRecordUi(List* list)
     push_back(list, node);
 }
 
+void analyzeUi(List* list)
+{
+    double courseAvg[COURSE_NUM], sumAvg, avgAvg;
+    int courseLetter[COURSE_NUM][5] = {0}, avgLetter[5] = {0};
+    const char letter_char[] = {'A', 'B', 'C', 'D', 'F'};
+    for (int i = 0; i < COURSE_NUM; ++i)
+    {
+        courseAvg[i] = calcCourseAvg(list, i);
+    }
+    sumAvg = calcSumAvg(list);
+    avgAvg = sumAvg / COURSE_NUM;
+    calcCourseLetter(list, courseLetter);
+    calcAvgLetter(list, avgLetter);
+
+    clear();
+    puts("Average score of:");
+    for (int i = 0; i < COURSE_NUM; ++i)
+    {
+        char course[10];
+        strcpy(course, course_str[i]);
+        printf("\t%-7s:%6.2f\n", captialize(course), courseAvg[i]);
+    }
+    printf("\t%-7s:%6.2f\n", "Average", avgAvg);
+    printf("\t%-7s:%6.2f\n", "Sum", sumAvg);
+    puts("");
+    puts("Letter score number and percentage of:");
+    puts("(A: 90+; B: 80+; C: 70+; D: 60+; F: 60-)");
+    for (int i = 0; i < COURSE_NUM; ++i)
+    {
+        printf("\t%-7s:\n", course_str[i]);
+        for (int j = 0; j < 5; ++j)
+        {
+            printf("\t\t%c:%3i,%6.2f%%\n", letter_char[j],
+                   courseLetter[i][j], courseLetter[i][j] * 100. / list->length);
+        }
+    }
+    printf("\t%-7s:\n", "Average");
+    for (int i = 0; i < 5; ++i)
+        printf("\t\t%c:%3i,%6.2f%%\n", letter_char[i],
+               avgLetter[i], (double) avgLetter[i] * 100. / list->length);
+}
+
 void searchUi(List* ori)
 {
     List* list = newListFromOri(ori);
@@ -88,10 +130,10 @@ void searchUi(List* ori)
     double minScore, maxScore;
     int course;
     bool back = false;
+    clear();
 
     while (true)
     {
-        clear();
         printList(list);
         while (true)
         {
@@ -150,7 +192,8 @@ void searchUi(List* ori)
             puts("");
             puts("1. Back to main menu");
             puts("2. Searching from result");
-            puts("3. Delete records in result and back to main menu");
+            puts("3. Analyze result");
+            puts("4. Delete records in result and back to main menu");
             puts("0. Quit");
 
             if (getOpt(&opt) != 1)
@@ -164,8 +207,13 @@ void searchUi(List* ori)
                 break;
             case 2:
                 success = true;
+                clear();
                 break;
             case 3:
+                analyzeUi(result);
+                printList(result);
+                break;
+            case 4:
                 deleteListFromOri(list, result);
                 back = true;
                 break;
@@ -177,15 +225,6 @@ void searchUi(List* ori)
     }
 
     freeList(list);
-}
-
-void analyzeUi(List* list)
-{
-    double courseAvg[COURSE_NUM], sumAvg, avgAvg;
-    for (int i = 0; i < COURSE_NUM; ++i)
-    {
-        courseAvg[i] = calcCourseAvg(list, i);
-    }
 }
 
 int main()
@@ -204,7 +243,7 @@ int main()
         puts("3. Search records");
         puts("4. Add a new record");
         puts("5. Analyze scores");
-        puts("5. Save changes");
+        puts("6. Save changes");
         puts("0. Exit");
 
         if (getOpt(&opt) != 1)

@@ -7,9 +7,14 @@
 #define NAME_SIZE (NAME_LENGTH + 2)
 #define COURSE_NUM  3
 
-#define GENDER_MALE     0X1
-#define GENDER_FEMALE   0X2
-#define GENDER_OTHER    0X0
+#define GENDER_MALE     0x1
+#define GENDER_FEMALE   0x2
+#define GENDER_OTHER    0x0
+
+#define ORDER_AVERAGE   -0x1
+#define ORDER_ID        -0x2
+#define ORDER_NAME      -0x3
+#define ORDER_RANK      -0x4
 
 static const char* const gender_str[3] = {"other", "male", "female"};
 static const char* const course_str[COURSE_NUM] = {"math", "English", "physics"};
@@ -33,5 +38,10 @@ typedef struct _Student {
 Student* newStudent();
 void freeStudent(Student* pt);
 void calcStu(Student *stu);
+
+int cmpId(const Student* a, const Student* b, int meaninglessKey);
+int cmpName(const Student* a, const Student* b, int meaninglessKey);
+int cmpAvg(const Student* a, const Student *b, int meaninglessKey);
+int cmpCourse(const Student *a, const Student *b, int course);
 
 #endif // STUDENT_H_INCLUDED

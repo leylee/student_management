@@ -16,7 +16,9 @@ typedef struct _List {
 Node* newNode();
 void freeNode(Node* pt);
 List* newList();
+List* newListFromOri(List* ori);
 void freeList(List* pt);
+
 void push_back(List* list, Node* node);
 void deleteNode(List* list, Node* node);
 void pop_back(List *list);
@@ -26,7 +28,12 @@ List* searchByName(List *list, const char* name);
 List* searchByAvgScore(List* list, double minScore, double maxScore);
 List* searchByCourseScore(List* list, double minScore, double maxScore, int course);
 
-void calcList(List *list);
+void calcList(const List *list);
+double calcCourseAvg(const List* list, int course);
+double calcSumAvg(const List* list);
+void calcCourseLetter(const List* list, int cnt[COURSE_NUM][5]);
+void calcAvgLetter(const List* list, int cnt[5]);
+
 void deleteListFromOri(List* ori, List* tar);
 
 
