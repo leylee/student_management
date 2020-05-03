@@ -42,6 +42,18 @@ List* newList()
     return list;
 }
 
+/* 从原链表复制一个新链表 */
+List* newListFromOri(List* ori)
+{
+    List* list = newList();
+    Node* node = ori->head->nxt;
+    while (node->nxt)
+    {
+        push_back(list, newNodeFromOri(node));
+    }
+    return list;
+}
+
 /* 析构链表 */
 void freeList(List* list)
 {
@@ -152,6 +164,9 @@ void calcList(List *list)
         node = node->nxt;
     }
 }
+
+/* 计算单科平均分 */
+void calcList()
 
 void deleteListFromOri(List* ori, List* tar)
 {

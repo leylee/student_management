@@ -35,7 +35,7 @@ void initDataUi(List* list)
         puts("\nLoad student data from file?");
         puts("1. Yes");
         puts("2. No, create a new file to save student data");
-        puts("0. Exit");
+        puts("0. Quit");
 
         if (getOpt(&opt) != 1)
             continue;
@@ -79,15 +79,15 @@ void newRecordUi(List* list)
     push_back(list, node);
 }
 
-void searchUi(List* list)
+void searchUi(List* ori)
 {
+    List* list = newListFromOri(ori);
     List* result = NULL;
     char id[ID_SIZE];
     char name[NAME_SIZE];
     double minScore, maxScore;
     int course;
     bool back = false;
-    bool listIsOri = true;
 
     while (true)
     {
@@ -103,12 +103,15 @@ void searchUi(List* list)
             puts("2. Name");
             puts("3. Average core");
             puts("4. Single course score");
+            puts("0. Quit");
 
             success = true;
             if (getOpt(&opt) != 1)
                 continue;
             switch (opt)
             {
+            case 0:
+                exit(0);
             case 1:
                 getString("Student ID (less than %i characters): ", id, ID_LENGTH);
                 result = searchById(list, id);
@@ -137,6 +140,8 @@ void searchUi(List* list)
         }
 
         printList(result);
+        freeList(list);
+        list = result;
 
         bool success = false;
         while (!back && !success)
@@ -169,18 +174,18 @@ void searchUi(List* list)
 
         if (back)
             break;
-        if (listIsOri)
-        {
-            listIsOri = false;
-        }
-        else
-        {
-            freeList(list);
-        }
-        list = result;
     }
 
-    freeList(result);
+    freeList(list);
+}
+
+void analyzeUi(List* list)
+{
+    double courseAvg[COURSE_NUM], sumAvg, avgAvg;
+    for (int i = 0; i < COURSE_NUM; ++i)
+    {
+        courseAvg[i] = calcCourseAvg(list, i);
+    }
 }
 
 int main()
@@ -198,6 +203,7 @@ int main()
         puts("2. List sorted records");
         puts("3. Search records");
         puts("4. Add a new record");
+        puts("5. Analyze scores");
         puts("5. Save changes");
         puts("0. Exit");
 
@@ -209,6 +215,7 @@ int main()
         case 0:
             exit(0);
         case 1:
+            clear();
             printList(list);
             break;
         case 3:
@@ -221,7 +228,10 @@ int main()
             puts("Record saved.\n");
             break;
         case 5:
-
+            analyzeUi(list);
+            break;
+        case 6:
+            clear();
             if (writeData(list) < 0)
                 fputs("Failed to save data!\n\n", stderr);
             else
