@@ -21,15 +21,16 @@ static const char* const course_str[COURSE_NUM] = {"math", "English", "physics"}
 
 typedef enum {
     math, english, physics
-} Subject;
+} Course;
 typedef enum {
     other, male, female
 } Gender;
 
 typedef struct _Student {
-    char id[ID_SIZE];        // 学号
-    char name[NAME_SIZE];    // 姓名
+    char id[ID_SIZE];           // 学号
+    char name[NAME_SIZE];       // 姓名
     int gender;                 // 性别
+    int rank;                   // 排名
     double score[COURSE_NUM];   // 成绩
     double avg;                 // 平均成绩
     double sum;                 // 总成绩
@@ -39,9 +40,10 @@ Student* newStudent();
 void freeStudent(Student* pt);
 void calcStu(Student *stu);
 
-int cmpId(const Student* a, const Student* b, int meaninglessKey);
-int cmpName(const Student* a, const Student* b, int meaninglessKey);
-int cmpAvg(const Student* a, const Student *b, int meaninglessKey);
+int cmpId(const Student* a, const Student* b, int meaninglessArg);
+int cmpName(const Student* a, const Student* b, int meaninglessArg);
+int cmpAvg(const Student* a, const Student *b, int meaninglessArg);
 int cmpCourse(const Student *a, const Student *b, int course);
+int cmpRank(const Student *a, const Student *b, int meaninglessArg);
 
 #endif // STUDENT_H_INCLUDED

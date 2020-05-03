@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 /* 构造链表节点 */
 Node* newNode()
@@ -151,6 +152,23 @@ List* searchByCourseScore(List* list, double minScore, double maxScore, int cour
         {
             push_back(result, newNodeFromOri(node));
         }
+        node = node->nxt;
+    }
+    return result;
+}
+
+/* 按排名查找 */
+List* searchByRank(List* list, int minRank, int maxRank)
+{
+    List* result = newList();
+    Node* node = list->head->nxt;
+    while (node->nxt)
+    {
+        if (node->stu->rank >= minRank && node->stu->rank <= maxRank)
+        {
+            push_back(result, newNodeFromOri(node));
+        }
+        node = node->nxt;
     }
     return result;
 }
@@ -244,13 +262,24 @@ void deleteListFromOri(List* ori, List* tar)
     }
 }
 
+/* 交换两个节点的顺序 */
+void swapNode(Node* a, Node *b)
+{
+    a->lst->nxt = b;
+    b->nxt->lst = a;
+    b->lst = a->lst;
+    a->nxt = b->nxt;
+    a->lst = b;
+    b->nxt = a;
+}
+
 /* 对链表进行排序, 采用冒泡排序, 时间复杂度 O(n^2) */
 /* order 为搜索关键字, 若为非负整数, 则使用该数代表的课程为关键字比较.
  * 若为其他常量, 则按照给定的关键字排序.
  */
 void sortList(List* list, int order, bool reverse)
 {
-    int (*cmp) (const Student* Student a, const Student* b, int arg) = NULL;
+    int (*cmp) (const Student* a, const Student* b, int order) = NULL;
 
     switch (order)
     {
@@ -263,8 +292,39 @@ void sortList(List* list, int order, bool reverse)
     case ORDER_NAME:
         cmp = cmpName;
         break;
+    case ORDER_RANK:
+        cmp = cmpRank;
+        break;
     default:
         cmp = cmpCourse;
         break;
+    }
+
+    int times = list->length;
+    while (--times)
+    {
+        Node* node = list->head->nxt;
+        while (node->nxt && node->nxt->nxt)
+        {
+            if ((cmp(node->stu, node->nxt->stu, order) > 0) != reverse)
+            {
+                swapNode(node, node->nxt);
+            }
+            else
+            {
+                node = node->nxt;
+            }
+        }
+    }
+}
+
+void rankList(List* list)
+{
+    Node* node = list->head->nxt;
+    int rank = 1;
+    while (node->nxt)
+    {
+        node->stu->rank = rank++;
+        node = node->nxt;
     }
 }

@@ -1,10 +1,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "student.h"
+#include <string.h>
 
 Student* newStudent()
 {
     Student* pt = (Student*) malloc(sizeof(Student));
+    pt->rank = 0;
     pt->gender = GENDER_OTHER;
     return pt;
 }
@@ -41,4 +43,9 @@ int cmpCourse(const Student *a, const Student *b, int course)
 {
     return a->score[course] < b->score[course] ? -1 :
         a->score[course] > b->score[course] ? 1: 0;
+}
+
+int cmpRank(const Student *a, const Student *b, int meaninglessArg)
+{
+    return a->rank < b->rank ? -1 : a->rank > b->rank ? 1 : 0;
 }
