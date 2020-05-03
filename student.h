@@ -9,9 +9,8 @@
 #define NAME_SIZE (NAME_LENGTH + 2) // 存储姓名的字符串的最大长度, 与上面同理
 #define COURSE_NUM  3  // 定义课程数量
 
-/** 课程名, 性别名的字符串存储 */
-static const char* const gender_str[3] = {"other", "male", "female"};
-static const char* const course_str[COURSE_NUM] = {"math", "English", "physics"};
+extern const char* const gender_str[3];
+extern const char* const course_str[COURSE_NUM];
 
 /** 枚举类型, 用作性别和课程的序号 */
 typedef enum {

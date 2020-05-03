@@ -5,6 +5,10 @@
 #include "student.h"
 #include <string.h>
 
+/** 课程名, 性别名的字符串存储 */
+const char* const gender_str[3] = {"other", "male", "female"};
+const char* const course_str[COURSE_NUM] = {"math", "English", "physics"};
+
 /** 构造 Student 结构体 */
 Student* newStudent()
 {
