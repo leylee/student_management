@@ -23,7 +23,11 @@ int main()
             puts("2. Save changes");
             puts("3. View records");
             puts("0. Quit");
-        } while (!getOpt(&opt) || opt < 0 || opt > 3);
+
+            if (getOpt(&opt) && opt >= 0 && opt <= 3)
+                break;
+            errorSound();
+        } while (true);
 
         clear();
         switch (opt)
@@ -38,7 +42,10 @@ int main()
         case 2:
             clear();
             if (writeData(list) < 0)
+            {
+                errorSound();
                 fputs("Failed to save data!\n\n", stderr);
+            }
             else
                 puts("Saved!");
             break;

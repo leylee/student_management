@@ -8,6 +8,17 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include "file_util.h"
+#ifdef WIN32
+#include <windows.h>
+#endif // WIN32
+
+/** 播放错误提示音 */
+void errorSound()
+{
+    #ifdef WIN32
+    PlaySound((LPCTSTR)SND_ALIAS_SYSTEMHAND, NULL, SND_ALIAS_ID | SND_ASYNC);
+    #endif // WIN32
+}
 
 /** 清屏函数 */
 void clear()
@@ -20,11 +31,19 @@ void clear()
     #endif
 }
 
-/** 获取选项, 成功返回 true, 失败返回 false */
+/** 获取选项, 成功返回 true, 失败播放提示音并返回 false */
 bool getOpt(int* pt)
 {
     rewind(stdin);
-    return scanf("%d", pt) == 1;
+    if (scanf("%d", pt) == 1)
+    {
+        return true;
+    }
+    else
+    {
+        //errorSound();
+        return false;
+    }
 }
 
 /** 打印一条学生信息 */
@@ -55,7 +74,7 @@ static void printTitle()
 
 /** 以下的 getXxx 函数为读取信息的函数
  * hint 参数为读取时的提示语.
- * 读取失败时, 自动使用 rewind(stdin); 清空输入缓冲区,
+ * 读取失败时, 自动使用 rewind(stdin); 清空输入缓冲区, 发出提示音
  * 并重新输出提示语, 等待用户输入.
  */
 /* 读入分数, 范围 0-100 */
@@ -70,6 +89,7 @@ static double getScore(const char* hint)
         if (scanf("%lf", &score) == 1
                 && score >= 0 && score <= 100)
             break;
+        errorSound();
     }
     return score;
 }
@@ -86,6 +106,7 @@ static int getGender(const char* hint)
         if (scanf("%d", &gender) == 1
                 && gender >= 0 && gender <= 2)
             break;
+        errorSound();
     }
     return gender;
 }
@@ -118,6 +139,7 @@ static int getCourse(const char* hint)
         if (scanf("%d", &course) == 1
                 && course >= 0 && course < COURSE_NUM)
             break;
+        errorSound();
     }
     return course;
 }
@@ -131,6 +153,7 @@ static int getRank(const char* hint)
         puts(hint);
         if (scanf("%d", &rank) == 1)
             break;
+        errorSound();
     }
     return rank;
 }
@@ -157,7 +180,11 @@ void initDataUi(List* list)
             puts("1. Yes");
             puts("2. No, create a new file to save student data");
             puts("0. Quit");
-        } while (!getOpt(&opt) || opt < 0 || opt > 2);
+
+            if (getOpt(&opt) && opt >= 0 && opt <= 2)
+                break;
+            errorSound();
+        } while (true);
 
         switch (opt)
         {
@@ -165,7 +192,10 @@ void initDataUi(List* list)
             exit(0);
         case 1:
             if (readData(list) < 0)
+            {
+                errorSound();
                 fputs("No saved data file found!\n\n", stderr);
+            }
             else
                 return;
             break;
@@ -218,7 +248,10 @@ static List* searchUi(List* list)
         puts("4. Single course score");
         puts("5. Rank");
 
-    } while (!getOpt(&opt) || opt < 1 || opt > 5);
+        if (getOpt(&opt) && opt >= 1 && opt <= 5)
+            break;
+        errorSound();
+    } while (true);
     switch (opt)
     {
     case 1:
@@ -307,7 +340,11 @@ static void sortUi(List* list)
         puts("3. Average / sum score");
         puts("4. Single course score");
         puts("5. rank");
-    } while(!getOpt(&opt) || opt < 1 || opt > 5);
+
+        if (getOpt(&opt) && opt >= 1 && opt <= 5)
+            break;
+        errorSound();
+    } while(true);
 
     if (opt == 4)
     {
@@ -318,7 +355,11 @@ static void sortUi(List* list)
         puts("Order:");
         puts("0. Ascending");
         puts("1. Descending");
-    } while (!getOpt(&reverseOpt) || opt < 0 || opt > 1);
+
+        if (getOpt(&reverseOpt) && opt >= 0 && opt <= 1)
+            break;
+        errorSound();
+    } while (true);
     reverse = (bool) reverseOpt;
 
     switch (opt)
@@ -371,7 +412,11 @@ void viewRecordsUi(List* ori)
             puts("5. Re-rank records");
             puts("6. Delete records in result and back to main menu");
             puts("0. Quit");
-        } while (!getOpt(&opt) || opt < 0 || opt > 6);
+
+            if (getOpt(&opt) && opt >= 0 && opt <= 6)
+                break;
+            errorSound();
+        } while (true);
 
         switch (opt)
         {

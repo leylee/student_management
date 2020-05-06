@@ -7,17 +7,15 @@
 
 1588519712 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\student.h
 
-1588517812 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\main.c
+1588520876 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\main.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
-	<string.h>
-	<ctype.h>
 	"list.h"
 	"file_util.h"
 	"ui.h"
 
-1588516796 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\list.c
+1588521083 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\list.c
 	"student.h"
 	"list.h"
 	<stdlib.h>
@@ -25,7 +23,7 @@
 	<stdio.h>
 	<stdbool.h>
 
-1588516796 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\list.h
+1588521167 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\list.h
 	"student.h"
 	<stdbool.h>
 
@@ -39,7 +37,7 @@
 1588516796 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\file_util.h
 	"list.h"
 
-1588516856 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\ui.h
+1588521116 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\ui.h
 	"list.h"
 
 1588518099 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\ui.c

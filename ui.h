@@ -5,6 +5,7 @@
 
 #include "list.h"
 
+void errorSound();
 void clear();
 void printList(List* list);
 void viewRecordsUi(List* ori);

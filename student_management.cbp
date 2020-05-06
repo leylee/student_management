@@ -4,7 +4,7 @@
 	<Project>
 		<Option title="student_management" />
 		<Option pch_mode="2" />
-		<Option compiler="mingw-w64" />
+		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
 				<Option output="bin/Debug/student_management" prefix_auto="1" extension_auto="1" />
@@ -33,6 +33,9 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Linker>
+			<Add library="winmm" />
+		</Linker>
 		<Unit filename="file_util.c">
 			<Option compilerVar="CC" />
 		</Unit>
