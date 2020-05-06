@@ -17,6 +17,8 @@ void errorSound()
 {
     #ifdef WIN32
     PlaySound((LPCTSTR)SND_ALIAS_SYSTEMHAND, NULL, SND_ALIAS_ID | SND_ASYNC);
+    #else
+    putchar('\a');
     #endif // WIN32
 }
 
@@ -31,7 +33,7 @@ void clear()
     #endif
 }
 
-/** 获取选项, 成功返回 true, 失败播放提示音并返回 false */
+/** 获取选项, 成功返回 true, 失败返回 false */
 bool getOpt(int* pt)
 {
     rewind(stdin);
@@ -61,7 +63,7 @@ static void printTitle()
 }
 
 /** 打印链表 */
- void printList(List* list)
+void printList(List* list)
 {
     printTitle();
     Node* node = list->head->nxt;
@@ -95,7 +97,7 @@ static double getScore(const char* hint)
 }
 
 /* 读入性别, 范围 0-2 */
-static int getGender(const char* hint)
+static Gender getGender(const char* hint)
 {
     int gender;
     while (true)
@@ -122,7 +124,7 @@ static void getString(const char* hint, char* str, int length)
 }
 
 /* 读入课程, 范围0到COURSE_NUM */
-static int getCourse(const char* hint)
+static Course getCourse(const char* hint)
 {
     int course;
     while (true)
@@ -159,7 +161,7 @@ static int getRank(const char* hint)
 }
 
 /** 改变字符串首字母为大写字母 */
-static char* captialize(char* str)
+static char* capitalize(char* str)
 {
     str[0] = toupper(str[0]);
     return str;
@@ -302,7 +304,7 @@ static void analyzeUi(List* list)
     {
         char course[10];
         strcpy(course, course_str[i]);
-        printf("\t%-7s:%6.2f\n", captialize(course), courseAvg[i]);
+        printf("\t%-7s:%6.2f\n", capitalize(course), courseAvg[i]);
     }
     printf("\t%-7s:%6.2f\n", "Average", avgAvg);
     printf("\t%-7s:%6.2f\n", "Sum", sumAvg);
