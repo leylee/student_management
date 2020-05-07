@@ -25,6 +25,15 @@ typedef struct _List {
     Node *head, *tail;  // 链表头尾各插入一个辅助节点,
 } List;
 
+/** 二叉堆, 一种树形数据结构, 用于O(nlgn)排序 */
+typedef struct {
+    Node** nodes;   // 堆中节点数组
+    int size;       // 堆中元素个数
+    int (*cmp)(const Student* a, const Student *b, int key); // 比较函数
+    bool reverse;   // 是否逆序
+    int key;        // 比较大小的关键字
+} Heap;
+
 Node* newNode();
 List* newList();
 List* newListFromOri(List* ori);
@@ -47,6 +56,7 @@ void calcCourseLetter(const List* list, int cnt[COURSE_NUM][5]);
 void calcAvgLetter(const List* list, int cnt[5]);
 
 void sortList(List* list, int key, bool reverse);
+void heapSortList(List* list, int key, bool reverse);
 void rankList(List* list);
 
 #endif // LIST_H_INCLUDED

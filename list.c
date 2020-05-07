@@ -337,6 +337,138 @@ void sortList(List* list, int key, bool reverse)
     }
 }
 
+/** 构造堆, size 为最大元素个数 */
+static Heap* newHeap(int size)
+{
+    Heap* heap = (Heap*) malloc(sizeof(Heap));
+    heap->size = 0;
+    heap->nodes = (Node**) malloc(sizeof(Node*) * (size + 1));
+    heap->cmp = NULL;
+    heap->reverse = false;
+    return heap;
+}
+
+/** 析构优先队列 */
+static void freeHeap(Heap* heap)
+{
+    free(heap->nodes);
+    free(heap);
+}
+
+/** 获取堆顶元素 */
+static Node* heapTop(Heap* heap)
+{
+    return heap->nodes[1];
+}
+
+/** 比较函数封装. 若 a 比 b 优先级高, 返回 true, 否则返回 false */
+static bool heapCmp(Heap* heap, const Student* a, const Student* b)
+{
+    return (heap->cmp(a, b, heap->key) < 0) != heap->reverse;
+}
+
+/** 将堆底元素上顶 */
+static void heapUp(Heap* heap, int pos)
+{
+    if (pos == 1)
+        return;
+    Node* fa = heap->nodes[pos >> 1];
+    Node* son = heap->nodes[pos];
+    if (heapCmp(heap, son->stu, fa->stu)) // 如果儿子比父亲优先, 则交换
+    {
+        heap->nodes[pos >> 1] = son;
+        heap->nodes[pos] = fa;
+        heapUp(heap, pos >> 1);
+    }
+}
+
+/** 将堆顶元素下沉 */
+static void heapDown(Heap* heap, int pos)
+{
+    int sonpos;
+
+    if ((pos << 1) > heap->size)
+        return;
+    else if ((pos << 1) == heap->size)
+        sonpos = pos << 1;
+    else
+    {
+        if (heapCmp(heap, heap->nodes[pos << 1]->stu, heap->nodes[(pos << 1) | 1]->stu))
+            sonpos = pos << 1;
+        else
+            sonpos = (pos << 1) | 1;
+    }
+
+    Node* fa = heap->nodes[pos];
+    Node* son = heap->nodes[sonpos];
+    if (heapCmp(heap, son->stu, fa->stu))
+    {
+        heap->nodes[pos] = son;
+        heap->nodes[sonpos] = fa;
+        heapDown(heap, sonpos);
+    }
+}
+
+/** 向堆中插入元素 */
+static void heapPush(Heap* heap, Node* node)
+{
+    heap->nodes[++heap->size] = node;
+    heapUp(heap, heap->size);
+}
+
+/** 从堆中弹出元素 */
+static void heapPop(Heap* heap)
+{
+    heap->nodes[1] = heap->nodes[heap->size--];
+    heapDown(heap, 1);
+}
+
+/** 对链表进行堆排序, 时间复杂度 O(nlgn)
+ * key 为搜索关键字, 若为非负整数, 则使用该数代表的课程为关键字比较.
+ * 若为其他常量, 则按照给定的关键字排序.
+ * reverse 为排序顺序. false 为升序, true 为降序
+ */
+void heapSortList(List* list, int key, bool reverse)
+{
+    Heap* heap = newHeap(list->length);
+
+    heap->key = key;
+    heap->reverse = reverse;
+    /* 根据key的值, 决定排序的关键字.
+    如果key为负值, 则按照定义确定函数; 否则, 将key看做course的序号, 按照course查找.*/
+    switch (key)
+    {
+    case KEY_AVERAGE:
+        heap->cmp = cmpAvg;
+        break;
+    case KEY_ID:
+        heap->cmp = cmpId;
+        break;
+    case KEY_NAME:
+        heap->cmp = cmpName;
+        break;
+    case KEY_RANK:
+        heap->cmp = cmpRank;
+        break;
+    default:
+        heap->cmp = cmpCourse;
+        break;
+    }
+
+    while (list->length)
+    {
+        heapPush(heap, newNodeFromOri(list->head->nxt));
+        deleteNode(list, list->head->nxt);
+    }
+    while (heap->size)
+    {
+        push_back(list, heapTop(heap));
+        heapPop(heap);
+    }
+
+    freeHeap(heap);
+}
+
 /** 将链表中学生的 Rank 从新从 1 编号 */
 void rankList(List* list)
 {

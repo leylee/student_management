@@ -358,7 +358,7 @@ static void sortUi(List* list)
         puts("0. Ascending");
         puts("1. Descending");
 
-        if (getOpt(&reverseOpt) && opt >= 0 && opt <= 1)
+        if (getOpt(&reverseOpt) && reverseOpt >= 0 && reverseOpt <= 1)
             break;
         errorSound();
     } while (true);
@@ -367,19 +367,19 @@ static void sortUi(List* list)
     switch (opt)
     {
     case 1:
-        sortList(list, KEY_ID, reverse);
+        heapSortList(list, KEY_ID, reverse);
         break;
     case 2:
-        sortList(list, KEY_NAME, reverse);
+        heapSortList(list, KEY_NAME, reverse);
         break;
     case 3:
-        sortList(list, KEY_AVERAGE, reverse);
+        heapSortList(list, KEY_AVERAGE, reverse);
         break;
     case 4:
-        sortList(list, course, reverse);
+        heapSortList(list, course, reverse);
         break;
     case 5:
-        sortList(list, KEY_RANK, reverse);
+        heapSortList(list, KEY_RANK, reverse);
         break;
     }
 }

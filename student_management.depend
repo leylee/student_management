@@ -1,13 +1,13 @@
 # depslib dependency file v1.0
-1588519712 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\student.c
+1588775988 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\student.c
 	<stdlib.h>
 	<stdio.h>
 	"student.h"
 	<string.h>
 
-1588519712 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\student.h
+1588776163 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\student.h
 
-1588520876 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\main.c
+1588776119 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\main.c
 	<stdio.h>
 	<stdlib.h>
 	<stdbool.h>
@@ -15,7 +15,7 @@
 	"file_util.h"
 	"ui.h"
 
-1588521083 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\list.c
+1588779998 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\list.c
 	"student.h"
 	"list.h"
 	<stdlib.h>
@@ -23,7 +23,7 @@
 	<stdio.h>
 	<stdbool.h>
 
-1588521167 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\list.h
+1588778988 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\list.h
 	"student.h"
 	<stdbool.h>
 
@@ -37,10 +37,10 @@
 1588516796 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\file_util.h
 	"list.h"
 
-1588521116 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\ui.h
+1588657986 d:\google drive\2020春\c语言程序设计b-郭萍\student_management\ui.h
 	"list.h"
 
-1588518099 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\ui.c
+1588777621 source:d:\google drive\2020春\c语言程序设计b-郭萍\student_management\ui.c
 	"list.h"
 	<stdio.h>
 	"ui.h"
@@ -49,4 +49,5 @@
 	<ctype.h>
 	<stdlib.h>
 	"file_util.h"
+	<windows.h>
 
