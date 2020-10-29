@@ -33,17 +33,25 @@ void clear()
     #endif
 }
 
+/** 清空缓冲区函数 */
+void purgeBuf()
+{
+    int ch;
+    while ((ch=getchar()) != EOF && ch != '\n')
+        ;
+}
+
 /** 获取选项, 成功返回 true, 失败返回 false */
 bool getOpt(int* pt)
 {
-    rewind(stdin);
     if (scanf("%d", pt) == 1)
     {
+        purgeBuf();
         return true;
     }
     else
     {
-        //errorSound();
+        purgeBuf();
         return false;
     }
 }
@@ -76,8 +84,8 @@ void printList(List* list)
 
 /** 以下的 getXxx 函数为读取信息的函数
  * hint 参数为读取时的提示语.
- * 读取失败时, 自动使用 rewind(stdin); 清空输入缓冲区, 发出提示音
- * 并重新输出提示语, 等待用户输入.
+ * 使用scanf的每次读取后, 使用purgeBuf清空缓冲区.
+ * 若读取失败, 发出提示音, 重新提示用户输入.
  */
 /* 读入分数, 范围 0-100 */
 static double getScore(const char* hint)
@@ -87,12 +95,13 @@ static double getScore(const char* hint)
     {
         if (hint)
             printf(hint);
-        rewind(stdin);
         if (scanf("%lf", &score) == 1
                 && score >= 0 && score <= 100)
             break;
         errorSound();
+        purgeBuf();
     }
+    purgeBuf();
     return score;
 }
 
@@ -104,12 +113,13 @@ static Gender getGender(const char* hint)
     {
         if (hint)
             printf(hint);
-        rewind(stdin);
         if (scanf("%d", &gender) == 1
                 && gender >= 0 && gender <= 2)
             break;
         errorSound();
+        purgeBuf();
     }
+    purgeBuf();
     return gender;
 }
 
@@ -118,7 +128,6 @@ static void getString(const char* hint, char* str, int length)
 {
     if (hint)
         printf(hint, length);
-    rewind(stdin);
     fgets(str, length + 2, stdin);
     str[strlen(str) - 1] = '\0';
 }
@@ -137,12 +146,13 @@ static Course getCourse(const char* hint)
             printf("%s: %i", course_str[i], i);
         }
         putchar('\n');
-        rewind(stdin);
         if (scanf("%d", &course) == 1
                 && course >= 0 && course < COURSE_NUM)
             break;
         errorSound();
+        purgeBuf();
     }
+    purgeBuf();
     return course;
 }
 
@@ -156,7 +166,9 @@ static int getRank(const char* hint)
         if (scanf("%d", &rank) == 1)
             break;
         errorSound();
+        purgeBuf();
     }
+    purgeBuf();
     return rank;
 }
 
